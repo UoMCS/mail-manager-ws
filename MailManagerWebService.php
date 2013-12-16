@@ -20,6 +20,7 @@ class MailManager_WebService
   {
     $this->authenticate();
     $this->open_connections();
+	$this->set_student_email_address();
   }
   
   private function authenticate()
@@ -43,6 +44,11 @@ class MailManager_WebService
 	}
   }
   
+  /**
+   * Create the student copy of the log table if it does not already
+   * exist. This is similar to the audit log, but can be accessed by the
+   * student and so cannot be used for auditing.
+   */
   private function create_student_log_table()
   {
     // First check if table exists
@@ -83,6 +89,11 @@ class MailManager_WebService
     return date(MM_WS_MYSQL_DATE_TIME);
   }
   
+  /**
+   * Set student email address based on their username. This involves a simple
+   * database lookup, although we may be able to replace this with LDAP at a later
+   * date.
+   */
   private function set_student_email_address()
   {
     $sql = 'SELECT email FROM users WHERE username = ? LIMIT 1';
