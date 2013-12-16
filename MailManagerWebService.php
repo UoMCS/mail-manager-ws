@@ -20,6 +20,9 @@ class MailManager_WebService
   private $subject = '';
   private $body = '';
   
+  private $additional_headers;
+  private $additional_parameters;
+  
   private $student_email_address;
   
   private $rate_limit_cutoff;
@@ -31,6 +34,8 @@ class MailManager_WebService
     $this->open_connections();
 	$this->set_student_email_address();
 	
+	$this->additional_headers = 'From: ' . $this->student_email_address;
+	$this->additional_parameters = '-f' . $this->student_email_address;
 	$this->rate_limit_cutoff = date(MM_WS_MYSQL_DATE_TIME, strtotime('-', MM_WS_RATE_LIMIT_CUTOFF));
   }
   
