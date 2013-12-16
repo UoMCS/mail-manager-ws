@@ -120,6 +120,20 @@ class MailManager_WebService
     return date(MM_WS_MYSQL_DATE_TIME);
   }
   
+  private function count_emails_sent()
+  {
+    $sql = 'SELECT id FROM audit_log WHERE log_time < ?';
+	$statement = $this->audit_log_connection->prepare($sql);
+	$statement->bind_param('s', $this->rate_limit_cutoff);
+	$statement->execute();
+	
+	$result = $statement->get_result();
+	$emails_sent = $result->num_rows;
+	$statement->close();
+	
+	return $emails_sent;
+  }
+  
   /**
    * Set student email address based on their username. This involves a simple
    * database lookup, although we may be able to replace this with LDAP at a later
