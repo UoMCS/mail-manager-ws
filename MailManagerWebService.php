@@ -2,6 +2,8 @@
 
 define('MM_WS_MYSQL_DATE_TIME', 'Y-m-d H:i:s');
 define('MM_WS_STUDENT_LOG_SCHEMA_FILE', 'student-log.sql');
+define('MM_WS_RATE_LIMIT_MAX_EMAILS', 60);
+define('MM_WS_RATE_LIMIT_CUTOFF', '1 hour');
 
 class MailManager_WebService
 {
@@ -20,12 +22,16 @@ class MailManager_WebService
   
   private $student_email_address;
   
+  private $rate_limit_cutoff;
+  
   public function __construct($db_config)
   {
     $this->authenticate();
 	$this->validate();
     $this->open_connections();
 	$this->set_student_email_address();
+	
+	$this->rate_limit_cutoff = date(MM_WS_MYSQL_DATE_TIME, strtotime('-', MM_WS_RATE_LIMIT_CUTOFF));
   }
   
   private function authenticate()
