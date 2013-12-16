@@ -184,4 +184,37 @@ class MailManager_WebService
 	  throw new Exception('Could not find student email address');
 	}
   }
+  
+  public function send()
+  {
+    $sql = 'INSERT INTO audit_log (username, recipient, subject, body, log_time) VALUES (?, ?, ?, ?, ?)';
+	$statement = $this->audit_log_connection->prepare($sql);
+	  
+	if ($statement !== FALSE)
+	{
+	  $current_date_time = $this->get_current_date_time();
+	  $statement->bind_param('sssss', $this->student_username, $this->recipient, $this->subject, $this->body, $current_date_time);
+	  $statement->execute();
+	}
+	else
+	{
+	  throw new Exception('Could not prepare audit log SQL query');
+	}
+  
+    $sql = 'INSERT INTO mail_manager_log (recipient, subject, body, log_time) VALUES (?, ?, ?, ?)';
+	$statement = $this->student_log_connection->prepare($sql);
+	  
+	if ($statement !== FALSE)
+	{
+	  $current_date_time = $this->get_current_date_time();
+	  $statement->bind_param('ssss', $this->recipient, $this->subject, $this->body, $current_date_time);
+	  $statement->execute();
+	}
+	else
+	{
+	  throw new Exception('Could not prepare student log SQL query');
+	}
+	
+	
+  }
 }
