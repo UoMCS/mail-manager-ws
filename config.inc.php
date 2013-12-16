@@ -1,7 +1,16 @@
 <?php
 
-$database_host = '';
-$database_user = '';
-$database_pass = '';
-$database_name = '';
-
+$db_config = array(
+  'email_lookup' => array(
+    'host' => '',
+	'username' => '',
+	'password' => '',
+	'dbname' => ''
+  ),
+  'audit_log' => array(
+    'host' => '',
+	'username' => '',
+	'password' => '',
+	'dbname' => ''
+  )
+);
