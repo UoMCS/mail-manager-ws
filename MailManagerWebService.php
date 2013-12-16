@@ -14,6 +14,10 @@ class MailManager_WebService
   private $student_host;
   private $student_dbname;
   
+  private $recipient = '';
+  private $subject = '';
+  private $body = '';
+  
   private $student_email_address;
   
   public function __construct($db_config)
@@ -70,7 +74,22 @@ class MailManager_WebService
   
   private function validate()
   {
-    
+    if (empty($this->recipient))
+	{
+	  throw new Exception('No recipient specified');
+	}
+	
+	if (empty($this->subject))
+	{
+	  throw new Exception('No subject specified');
+	}
+	
+	if (empty($this->body))
+	{
+	  throw new Exception('No body specified');
+	}
+	
+	
   }
   
   private function open_connections()
