@@ -14,6 +14,8 @@ class MailManager_WebService
   private $student_host;
   private $student_dbname;
   
+  private $student_email_address;
+  
   public function __construct($db_config)
   {
     $this->authenticate();
@@ -26,6 +28,12 @@ class MailManager_WebService
 	$this->student_password = isset($_POST['password']) ? trim($_POST['password']) : null;
 	$this->student_host = isset($_POST['host']) ? trim($_POST['host']) : null;
 	$this->student_dbname = isset($_POST['dbname']) ? trim($_POST['dbname']) : null;
+	
+	// Don't even try to authenticate if we are missing a username/password combination
+	if (empty($this->student_username) || empty($this->student_password))
+	{
+	  throw new Exception('Could not authenticate student');
+	}
 	
 	$this->student_log_connection = new mysqli($this->student_host, $this->student_username, $this->student_password, $this->student_dbname);
 	
@@ -73,5 +81,40 @@ class MailManager_WebService
   private function get_current_date_time()
   {
     return date(MM_WS_MYSQL_DATE_TIME);
+  }
+  
+  private function set_student_email_address()
+  {
+    $sql = 'SELECT email FROM users WHERE username = ? LIMIT 1';
+	$statement = $this->email_lookup_connection->prepare($sql);
+	$statement->bind_param('s', $this->student_username);
+	$statement->execute();
+	
+	$result = $statement->get_result();
+	
+	if ($result !== FALSE)
+	{
+	  if ($result->num_rows === 1)
+	  {
+	    $data = $result->fetch_assoc();
+		
+		if (is_array($data) && isset($data['email']) && !empty($data['email']) && filter_var($data['email'], FILTER_VALIDATE_EMAIL))
+		{
+		  $this->student_email_address = $data['email'];
+		}
+		else
+		{
+		  throw new Exception('Could not find student email address');
+		}
+	  }
+	  else
+	  {
+	    throw new Exception('Could not find student email address');
+	  }
+	}
+	else
+	{
+	  throw new Exception('Could not find student email address');
+	}
   }
 }
