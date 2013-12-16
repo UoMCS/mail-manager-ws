@@ -19,7 +19,7 @@ The following parameters should be supplied:
  * `subject`: Email subject.
  * `recipient`: Email recipient.
 
-The bdoy of the post request should be the body of the email.
+The body of the post request should be the body of the email.
 
 If you use the Mail Manager class (recommended), it will automatically provide the above parameters for you.
 
