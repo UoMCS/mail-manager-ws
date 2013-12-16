@@ -19,6 +19,7 @@ class MailManager_WebService
   public function __construct($db_config)
   {
     $this->authenticate();
+	$this->validate();
     $this->open_connections();
 	$this->set_student_email_address();
   }
@@ -65,6 +66,11 @@ class MailManager_WebService
         $result = $this->student_log_connection->query($schema);
       }
     }
+  }
+  
+  private function validate()
+  {
+    
   }
   
   private function open_connections()
