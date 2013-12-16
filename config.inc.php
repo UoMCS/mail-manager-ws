@@ -14,3 +14,7 @@ $db_config = array(
 	'dbname' => ''
   )
 );
+
+$mail_config = array(
+  'host' => ''
+);

@@ -27,10 +27,16 @@ class MailManager_WebService
   
   private $rate_limit_cutoff;
   
-  public function __construct($db_config)
+  private $db_config;
+  private $mail_config;
+  
+  public function __construct($db_config, $mail_config)
   {
+    $this->db_config = $db_config;
+	$this->mail_config = $mail_config;
+  
     $this->authenticate();
-	$this->validate();
+	$this->validate();	
     $this->open_connections();
 	$this->set_student_email_address();
 	
@@ -105,14 +111,14 @@ class MailManager_WebService
   
   private function open_connections()
   {
-    $this->email_lookup_connection = new mysqli($db_config['email_lookup']['host'], $db_config['email_lookup']['username'], $db_config['email_lookup']['password'], $db_config['email_lookup']['dbname']);
+    $this->email_lookup_connection = new mysqli($this->db_config['email_lookup']['host'], $this->db_config['email_lookup']['username'], $this->db_config['email_lookup']['password'], $this->db_config['email_lookup']['dbname']);
 	
 	if ($this->email_lookup_connection->connect_error)
 	{
 	  throw new Exception('Could not establish email lookup connection');
 	}
 	
-	$this->audit_log_connection = new mysqli($db_config['audit_log']['host'], $db_config['audit_log']['username'], $db_config['audit_log']['password'], $db_config['audit_log']['dbname']);
+	$this->audit_log_connection = new mysqli($this->db_config['audit_log']['host'], $this->db_config['audit_log']['username'], $this->db_config['audit_log']['password'], $this->db_config['audit_log']['dbname']);
 	
 	if ($this->audit_log_connection)
 	{
