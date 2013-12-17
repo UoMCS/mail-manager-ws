@@ -20,8 +20,7 @@ class MailManager_WebService
   private $subject = '';
   private $body = '';
   
-  private $additional_headers;
-  private $additional_parameters;
+  private $additional_headers = array();
   
   private $student_email_address;
   
@@ -38,12 +37,13 @@ class MailManager_WebService
 	$this->mail_config = $mail_config;
   
     $this->authenticate();
-	$this->validate();	
+	$this->validate();
     $this->open_connections();
 	$this->set_student_email_address();
 	
-	$this->additional_headers = 'From: ' . $this->student_email_address;
-	$this->additional_parameters = '-f' . $this->student_email_address;
+	$this->additional_headers['From'] = $this->student_email_address;
+	$this->additional_headers['Return-Path'] = $this->mail_config['envelope_from'];
+	
 	$this->rate_limit_cutoff = date(MM_WS_MYSQL_DATE_TIME, strtotime('-', MM_WS_RATE_LIMIT_CUTOFF));
   }
   
@@ -107,8 +107,6 @@ class MailManager_WebService
 	{
 	  throw new Exception('No body specified');
 	}
-	
-	
   }
   
   private function open_connections()
@@ -187,8 +185,20 @@ class MailManager_WebService
 	}
   }
   
+  private function rate_limit()
+  {
+    $emails_sent = $this->count_emails_sent();
+	
+	if ($emails_sent > MM_WS_RATE_LIMIT_MAX_EMAILS)
+	{
+	  throw new Exception('Rate limit exceeded, can send maximum of ' . MM_WS_RATE_LIMIT_MAX_EMAILS . ' in ' . MM_WS_RATE_LIMIT_CUTOFF);
+	}
+  }
+  
   public function send()
   {
+    $this->rate_limit();
+  
     $sql = 'INSERT INTO audit_log (username, recipient, subject, body, log_time) VALUES (?, ?, ?, ?, ?)';
 	$statement = $this->audit_log_connection->prepare($sql);
 	  
@@ -217,6 +227,7 @@ class MailManager_WebService
 	  throw new Exception('Could not prepare student log SQL query');
 	}
 	
+	$mail = Mail::factory('smtp', $this->smtp_config);
 	
   }
 }
