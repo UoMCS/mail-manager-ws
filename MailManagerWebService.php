@@ -95,6 +95,10 @@ class MailManager_WebService
   
   private function validate()
   {
+    $this->recipient = isset($_POST['recipient']) ? trim($_POST['recipient']) : null;
+	$this->subject = isset($_POST['subject']) ? trim($_POST['subject']) : null;
+	$this->body = file_get_contents('php://input');
+  
     if (empty($this->recipient))
 	{
 	  throw new Exception('No recipient specified');
