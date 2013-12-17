@@ -18,8 +18,7 @@ The following parameters should be supplied:
  * `dbname`: Student database name.
  * `subject`: Email subject.
  * `recipient`: Email recipient.
-
-The body of the post request should be the body of the email.
+ * `body`: Email body.
 
 If you use the Mail Manager class (recommended), it will automatically set the above parameters for you.
 

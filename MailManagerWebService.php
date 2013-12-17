@@ -97,7 +97,7 @@ class MailManager_WebService
   {
     $this->recipient = isset($_POST['recipient']) ? trim($_POST['recipient']) : null;
 	$this->subject = isset($_POST['subject']) ? trim($_POST['subject']) : null;
-	$this->body = file_get_contents('php://input');
+	$this->body = isset($_POST['body']) ? $_POST['body'] : null;
   
     if (empty($this->recipient))
 	{
