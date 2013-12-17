@@ -1,5 +1,7 @@
 <?php
 
+require_once 'Mail.php';
+
 define('MM_WS_MYSQL_DATE_TIME', 'Y-m-d H:i:s');
 define('MM_WS_STUDENT_LOG_SCHEMA_FILE', 'student-log.sql');
 define('MM_WS_RATE_LIMIT_MAX_EMAILS', 60);
