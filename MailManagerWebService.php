@@ -28,11 +28,13 @@ class MailManager_WebService
   private $rate_limit_cutoff;
   
   private $db_config;
+  private $smtp_config;
   private $mail_config;
   
-  public function __construct($db_config, $mail_config)
+  public function __construct($db_config, $smtp_config, $mail_config)
   {
     $this->db_config = $db_config;
+	$this->smtp_config = $smtp_config;
 	$this->mail_config = $mail_config;
   
     $this->authenticate();

@@ -15,6 +15,10 @@ $db_config = array(
   )
 );
 
-$mail_config = array(
+$smtp_config = array(
   'host' => ''
+);
+
+$mail_config = array(
+  'envelope_from' => ''
 );
