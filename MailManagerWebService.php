@@ -60,14 +60,18 @@ class MailManager_WebService
 	// Don't even try to authenticate if we are missing a username/password combination
 	if (empty($this->student_username) || empty($this->student_password))
 	{
-	  throw new Exception('Could not authenticate student');
+	  error_log('Could not authenticate student');
+	  header('HTTP/1.1 500 Server Error');
+	  exit;
 	}
 	
 	$this->student_log_connection = new mysqli($this->student_host, $this->student_username, $this->student_password, $this->student_dbname);
 	
 	if ($this->student_log_connection->connect_error)
 	{
-	  throw new Exception('Could not authenticate student');
+	  error_log('Could not authenticate student');
+	  header('HTTP/1.1 500 Server Error');
+	  exit;
 	}
   }
   
@@ -102,17 +106,23 @@ class MailManager_WebService
   
     if (empty($this->recipient))
 	{
-	  throw new Exception('No recipient specified');
+	  error_log('No recipient specified');
+	  header('HTTP/1.1 400 Bad Request');
+	  exit;
 	}
 	
 	if (empty($this->subject))
 	{
-	  throw new Exception('No subject specified');
+	  error_log('No subject specified');
+	  header('HTTP/1.1 400 Bad Request');
+	  exit;
 	}
 	
 	if (empty($this->body))
 	{
-	  throw new Exception('No body specified');
+	  error_log('No body specified');
+	  header('HTTP/1.1 400 Bad Request');
+	  exit;
 	}
   }
   
@@ -182,17 +192,23 @@ class MailManager_WebService
 		}
 		else
 		{
-		  throw new Exception('Could not find student email address');
+		  error_log('Could not find student email address');
+	      header('HTTP/1.1 500 Server Error');
+	      exit;
 		}
 	  }
 	  else
 	  {
-	    throw new Exception('Could not find student email address');
+		error_log('Could not find student email address');
+	    header('HTTP/1.1 500 Server Error');
+	    exit;
 	  }
 	}
 	else
 	{
-	  throw new Exception('Could not find student email address');
+	  error_log('Could not find student email address');
+	  header('HTTP/1.1 500 Server Error');
+	  exit;
 	}
   }
   
