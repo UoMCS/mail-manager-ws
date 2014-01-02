@@ -237,7 +237,9 @@ class MailManager_WebService
 	}
 	else
 	{
-	  throw new Exception('Could not prepare audit log SQL query');
+	  error_log('Could not prepare audit log SQL query');
+	  header('HTTP/1.1 500 Server Error');
+	  exit;
 	}
   
     $sql = 'INSERT INTO mail_manager_log (recipient, subject, body, log_time) VALUES (?, ?, ?, ?)';
@@ -251,7 +253,9 @@ class MailManager_WebService
 	}
 	else
 	{
-	  throw new Exception('Could not prepare student log SQL query');
+	  error_log('Could not prepare student log SQL query');
+	  header('HTTP/1.1 500 Server Error');
+	  exit;
 	}
 	
 	$transport = new Zend_Mail_Transport_Smtp($this->smtp_config['host']);
