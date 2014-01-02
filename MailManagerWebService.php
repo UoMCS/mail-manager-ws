@@ -126,7 +126,7 @@ class MailManager_WebService
 	
 	$this->audit_log_connection = new mysqli($this->db_config['audit_log']['host'], $this->db_config['audit_log']['username'], $this->db_config['audit_log']['password'], $this->db_config['audit_log']['dbname']);
 	
-	if ($this->audit_log_connection)
+	if ($this->audit_log_connection->connect_error)
 	{
 	  error_log('Could not establish audit log connection');
 	  header('HTTP/1.1 500 Server Error');
