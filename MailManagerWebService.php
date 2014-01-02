@@ -241,8 +241,8 @@ class MailManager_WebService
 	
 	if ($emails_sent > MM_WS_RATE_LIMIT_MAX_EMAILS)
 	{
-	  error_log('Rate limit exceeded, can send maximum of ' . MM_WS_RATE_LIMIT_MAX_EMAILS . ' in ' . MM_WS_RATE_LIMIT_CUTOFF);
 	  header('HTTP/1.1 429 Too Many Requests');
+	  echo 'Rate limit exceeded, can send maximum of ' . MM_WS_RATE_LIMIT_MAX_EMAILS . ' in ' . MM_WS_RATE_LIMIT_CUTOFF;
 	  exit;
 	}
   }
