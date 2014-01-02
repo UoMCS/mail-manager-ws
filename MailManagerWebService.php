@@ -1,6 +1,6 @@
 <?php
 
-require_once 'Mail.php';
+require_once 'Zend/Mail.php';
 
 define('MM_WS_MYSQL_DATE_TIME', 'Y-m-d H:i:s');
 define('MM_WS_STUDENT_LOG_SCHEMA_FILE', 'student-log.sql');
@@ -237,7 +237,14 @@ class MailManager_WebService
 	  throw new Exception('Could not prepare student log SQL query');
 	}
 	
-	$mail = Mail::factory('smtp', $this->smtp_config);
+	$transport = new Zend_Mail_Transport_Smtp($this->smtp_config['host']);
+	Zend_Mail::setDefaultTransport($transport);
 	
+	$mail = new Zend_Mail();
+	$mail->setFrom($this->student_email_address);
+	$mail->addTo($this->recipient);
+	$mail->setSubject($this->subject);
+	$mail->setBodyText($this->body);
+	$mail->send();
   }
 }
