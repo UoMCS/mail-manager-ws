@@ -134,7 +134,7 @@ class MailManager_WebService
 	}
 	
 	// Check that recipient is in list of permitted domains
-	$recipient_domains_data = file_get_contents('recipient_domains');
+	$recipient_domains_data = file_get_contents('../recipient_domains');
 	$recipient_domains = explode("\n", $recipient_domains_data);
 	
 	list($user, $domain) = explode('@', $this->recipient);
