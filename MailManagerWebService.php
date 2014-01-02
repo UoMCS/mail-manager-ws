@@ -46,7 +46,7 @@ class MailManager_WebService
 	$this->additional_headers['From'] = $this->student_email_address;
 	$this->additional_headers['Return-Path'] = $this->mail_config['envelope_from'];
 	
-	$this->rate_limit_cutoff = date(MM_WS_MYSQL_DATE_TIME, strtotime('-', MM_WS_RATE_LIMIT_CUTOFF));
+	$this->rate_limit_cutoff = date(MM_WS_MYSQL_DATE_TIME, strtotime('-' . MM_WS_RATE_LIMIT_CUTOFF));
   }
   
   private function authenticate()
