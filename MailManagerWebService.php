@@ -121,7 +121,9 @@ class MailManager_WebService
 	
 	if ($this->email_lookup_connection->connect_error)
 	{
-	  throw new Exception('Could not establish email lookup connection');
+	  error_log('Could not establish email lookup connection');
+	  header('HTTP/1.1 500 Server Error');
+	  exit;
 	}
 	
 	$this->audit_log_connection = new mysqli($this->db_config['audit_log']['host'], $this->db_config['audit_log']['username'], $this->db_config['audit_log']['password'], $this->db_config['audit_log']['dbname']);
