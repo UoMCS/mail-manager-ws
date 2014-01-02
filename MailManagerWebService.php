@@ -5,7 +5,7 @@ require_once 'Zend/Mail/Transport/Smtp.php';
 
 define('MM_WS_MYSQL_DATE_TIME', 'Y-m-d H:i:s');
 define('MM_WS_STUDENT_LOG_SCHEMA_FILE', 'student-log.sql');
-define('MM_WS_RATE_LIMIT_MAX_EMAILS', 60);
+define('MM_WS_RATE_LIMIT_MAX_EMAILS', 30);
 define('MM_WS_RATE_LIMIT_CUTOFF', '1 hour');
 
 class MailManager_WebService
