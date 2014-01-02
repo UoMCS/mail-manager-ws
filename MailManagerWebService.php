@@ -61,7 +61,7 @@ class MailManager_WebService
 	if (empty($this->student_username) || empty($this->student_password))
 	{
 	  error_log('Could not authenticate student');
-	  header('HTTP/1.1 500 Server Error');
+	  header('HTTP/1.1 403 Forbidden');
 	  exit;
 	}
 	
@@ -70,7 +70,7 @@ class MailManager_WebService
 	if ($this->student_log_connection->connect_error)
 	{
 	  error_log('Could not authenticate student');
-	  header('HTTP/1.1 500 Server Error');
+	  header('HTTP/1.1 403 Forbidden');
 	  exit;
 	}
   }
@@ -121,6 +121,27 @@ class MailManager_WebService
 	if (empty($this->body))
 	{
 	  error_log('No body specified');
+	  header('HTTP/1.1 400 Bad Request');
+	  exit;
+	}
+	
+	// Check that email address is valid
+	if (!filter_var($this->recipient, FILTER_VALIDATE_EMAIL))
+	{
+	  error_log('Invalid recipient specified');
+	  header('HTTP/1.1 400 Bad Request');
+	  exit;
+	}
+	
+	// Check that recipient is in list of permitted domains
+	$recipient_domains_data = file_get_contents('recipient_domains');
+	$recipient_domains = explode("\n", $recipient_domains_data);
+	
+	list($user, $domain) = explode('@', $this->recipient);
+	
+	if (!in_array($domain, $recipient_domains))
+	{
+	  error_log('Recipient is not in list of permitted domains');
 	  header('HTTP/1.1 400 Bad Request');
 	  exit;
 	}
@@ -218,7 +239,9 @@ class MailManager_WebService
 	
 	if ($emails_sent > MM_WS_RATE_LIMIT_MAX_EMAILS)
 	{
-	  throw new Exception('Rate limit exceeded, can send maximum of ' . MM_WS_RATE_LIMIT_MAX_EMAILS . ' in ' . MM_WS_RATE_LIMIT_CUTOFF);
+	  error_log('Rate limit exceeded, can send maximum of ' . MM_WS_RATE_LIMIT_MAX_EMAILS . ' in ' . MM_WS_RATE_LIMIT_CUTOFF);
+	  header('HTTP/1.1 429 Too Many Requests');
+	  exit;
 	}
   }
   
