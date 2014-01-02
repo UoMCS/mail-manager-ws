@@ -5,8 +5,6 @@ require_once 'Zend/Mail/Transport/Smtp.php';
 
 define('MM_WS_MYSQL_DATE_TIME', 'Y-m-d H:i:s');
 define('MM_WS_STUDENT_LOG_SCHEMA_FILE', 'student-log.sql');
-define('MM_WS_RATE_LIMIT_MAX_EMAILS', 30);
-define('MM_WS_RATE_LIMIT_CUTOFF', '1 hour');
 
 class MailManager_WebService
 {
@@ -22,32 +20,27 @@ class MailManager_WebService
   private $recipient = '';
   private $subject = '';
   private $body = '';
-  
-  private $additional_headers = array();
-  
+    
   private $student_email_address;
   
   private $rate_limit_cutoff;
   
   private $db_config;
   private $smtp_config;
-  private $mail_config;
+  private $ws_config;
   
-  public function __construct($db_config, $smtp_config, $mail_config)
+  public function __construct($db_config, $smtp_config, $ws_config)
   {
     $this->db_config = $db_config;
 	$this->smtp_config = $smtp_config;
-	$this->mail_config = $mail_config;
+	$this->ws_config = $ws_config;
   
     $this->authenticate();
 	$this->validate();
     $this->open_connections();
 	$this->set_student_email_address();
 	
-	$this->additional_headers['From'] = $this->student_email_address;
-	$this->additional_headers['Return-Path'] = $this->mail_config['envelope_from'];
-	
-	$this->rate_limit_cutoff = date(MM_WS_MYSQL_DATE_TIME, strtotime('-' . MM_WS_RATE_LIMIT_CUTOFF));
+	$this->rate_limit_cutoff = date(MM_WS_MYSQL_DATE_TIME, strtotime('-' . $this->ws_config['rate_limit_cutoff']));
   }
   
   private function authenticate()
@@ -239,10 +232,10 @@ class MailManager_WebService
   {
     $emails_sent = $this->count_emails_sent();
 	
-	if ($emails_sent > MM_WS_RATE_LIMIT_MAX_EMAILS)
+	if ($emails_sent > $this->ws_config['rate_limit_max_emails'])
 	{
 	  header('HTTP/1.1 429 Too Many Requests');
-	  echo 'Rate limit exceeded, can send maximum of ' . MM_WS_RATE_LIMIT_MAX_EMAILS . ' in ' . MM_WS_RATE_LIMIT_CUTOFF;
+	  echo 'Rate limit exceeded, can send maximum of ' . $this->ws_config['rate_limit_max_emails'] . ' in ' . $this->ws_config['rate_limit_cutoff'];
 	  exit;
 	}
   }

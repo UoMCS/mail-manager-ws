@@ -19,6 +19,7 @@ $smtp_config = array(
   'host' => ''
 );
 
-$mail_config = array(
-  'envelope_from' => ''
+$ws_config = array(
+  'rate_limit_max_emails' => 30,
+  'rate_limit_cutoff', '1 hour'
 );
