@@ -129,7 +129,7 @@ class MailManager_WebService
 	if ($this->audit_log_connection)
 	{
 	  error_log('Could not establish audit log connection');
-	  http_send_status(500);
+	  header('HTTP/1.1 500 Server Error');
 	  exit;
 	}
   }
