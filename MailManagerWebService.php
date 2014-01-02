@@ -177,9 +177,9 @@ class MailManager_WebService
   
   private function count_emails_sent()
   {
-    $sql = 'SELECT id FROM audit_log WHERE log_time < ?';
+    $sql = 'SELECT id FROM audit_log WHERE log_time > ? AND username = ?';
 	$statement = $this->audit_log_connection->prepare($sql);
-	$statement->bind_param('s', $this->rate_limit_cutoff);
+	$statement->bind_param('ss', $this->rate_limit_cutoff, $this->student_username);
 	$statement->execute();
 	
 	$result = $statement->get_result();
