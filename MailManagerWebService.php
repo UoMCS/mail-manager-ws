@@ -143,8 +143,8 @@ class MailManager_WebService
 	
 	if (!in_array($domain, $recipient_domains))
 	{
-	  error_log('Recipient is not in list of permitted domains');
 	  header('HTTP/1.1 400 Bad Request');
+	  echo 'Recipient is not in list of permitted domains';
 	  exit;
 	}
   }
