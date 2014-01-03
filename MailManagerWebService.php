@@ -53,8 +53,8 @@ class MailManager_WebService
 	// Don't even try to authenticate if we are missing a username/password combination
 	if (empty($this->student_username) || empty($this->student_password))
 	{
-	  error_log('Could not authenticate student');
 	  header('HTTP/1.1 403 Forbidden');
+	  echo 'Could not authenticate student';
 	  exit;
 	}
 	
@@ -62,8 +62,8 @@ class MailManager_WebService
 	
 	if ($this->student_log_connection->connect_error)
 	{
-	  error_log('Could not authenticate student');
 	  header('HTTP/1.1 403 Forbidden');
+	  echo 'Could not authenticate student';
 	  exit;
 	}
   }
@@ -99,30 +99,30 @@ class MailManager_WebService
   
     if (empty($this->recipient))
 	{
-	  error_log('No recipient specified');
 	  header('HTTP/1.1 400 Bad Request');
+	  echo 'No recipient specified';
 	  exit;
 	}
 	
 	if (empty($this->subject))
 	{
-	  error_log('No subject specified');
 	  header('HTTP/1.1 400 Bad Request');
+	  echo 'No subject specified';
 	  exit;
 	}
 	
 	if (empty($this->body))
 	{
-	  error_log('No body specified');
 	  header('HTTP/1.1 400 Bad Request');
+	  echo 'No body specified';
 	  exit;
 	}
 	
 	// Check that email address is valid
 	if (!filter_var($this->recipient, FILTER_VALIDATE_EMAIL))
 	{
-	  error_log('Invalid recipient specified');
 	  header('HTTP/1.1 400 Bad Request');
+	  echo 'Invalid recipient specified';
 	  exit;
 	}
 	
