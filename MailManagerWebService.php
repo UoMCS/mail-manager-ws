@@ -66,6 +66,8 @@ class MailManager_WebService
 	  echo 'Could not authenticate student';
 	  exit;
 	}
+	
+	$this->create_student_log_table();
   }
   
   /**
