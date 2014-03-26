@@ -4,7 +4,7 @@ require_once 'Zend/Mail.php';
 require_once 'Zend/Mail/Transport/Smtp.php';
 
 define('MM_WS_MYSQL_DATE_TIME', 'Y-m-d H:i:s');
-define('MM_WS_STUDENT_LOG_SCHEMA_FILE', 'student-log.sql');
+define('MM_WS_STUDENT_LOG_SCHEMA_FILE', '../student-log.sql');
 
 class MailManager_WebService
 {
